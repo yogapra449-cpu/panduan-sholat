@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Panduan Sholat Lengkap</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Panduan Sholat 🤲</h1>
+        <select id="waktuSholat" onchange="updateKonten()" class="card" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px; cursor: pointer;">
+            <option value="subuh">Sholat Subuh</option>
+            <option value="zuhur">Sholat Zuhur</option>
+            <option value="ashar">Sholat Ashar</option>
+            <option value="maghrib">Sholat Maghrib</option>
+            <option value="isya">Sholat Isya</option>
+        </select>
+
+        <div id="kontenSholat"></div>
+    </div>
+
+    <script src="data-sholat.js"></script> <script>
+        function updateKonten() {
+            const waktu = document.getElementById('waktuSholat').value;
+            const data = dataSholat[waktu];
+            let html = `<h2>${data.judul}</h2>`;
+            data.langkah.forEach(item => {
+                html += `<div class="card"><h3>${item.nama}</h3><p class="arab">${item.arab}</p><p><i><p><i>${item.latin}</i></p>${item.terjemah}</i></p></div>`;
+            });
+            document.getElementById('kontenSholat').innerHTML = html;
+        }
+        window.onload = updateKonten;
+    </script>
+</body>
+</html>
