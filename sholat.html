@@ -2,31 +2,59 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panduan Sholat Lengkap</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Panduan Sholat 🤲</h1>
-        <select id="waktuSholat" onchange="updateKonten()" class="card" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px; cursor: pointer;">
+        
+        <select id="waktuSholat" onchange="updateKonten()" class="card" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px;">
             <option value="subuh">Sholat Subuh</option>
             <option value="zuhur">Sholat Zuhur</option>
             <option value="ashar">Sholat Ashar</option>
             <option value="maghrib">Sholat Maghrib</option>
             <option value="isya">Sholat Isya</option>
+            <option value="zikir">Zikir Setelah Shalat</option>
+            <option value="doa">Doa Setelah Shalat</option>
         </select>
 
         <div id="kontenSholat"></div>
     </div>
 
-    <script src="data-sholat.js"></script> <script>
+    <script src="data-sholat.js"></script>
+    <script src="data-doa.js"></script>
+    <script>
         function updateKonten() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const menuAsal = urlParams.get('menu');
+
+            if (menuAsal === 'zikir' && !window.sudahDiubah) {
+                document.getElementById('waktuSholat').value = 'zikir';
+                window.sudahDiubah = true;
+            }
+
             const waktu = document.getElementById('waktuSholat').value;
-            const data = dataSholat[waktu];
-            let html = `<h2>${data.judul}</h2>`;
-            data.langkah.forEach(item => {
-                html += `<div class="card"><h3>${item.nama}</h3><p class="arab">${item.arab}</p><p><i><p><i>${item.latin}</i></p>${item.terjemah}</i></p></div>`;
-            });
+            let html = '';
+
+            if (waktu === 'zikir') {
+                html += `<h2>Zikir Setelah Shalat</h2>`;
+                dataDoaDanZikir.zikir.forEach(item => {
+                    html += `<div class="card"><h3>${item.nama}</h3><p class="arab">${item.arab}</p><p><i>${item.latin}</i></p><p>${item.terjemah}</p></div>`;
+                });
+            } else if (waktu === 'doa') {
+                const doa = dataDoaDanZikir.doaSetelahShalat;
+                html += `<h2>${doa.judul}</h2>`;
+                html += `<div class="card"><p class="arab">${doa.arab}</p><p><i>${doa.latin}</i></p><p>${doa.terjemah}</p></div>`;
+            } else {
+                const data = dataSholat[waktu];
+                html += `<h2>${data.judul}</h2>`;
+                data.langkah.forEach(item => {
+                    html += `<div class="card"><h3>${item.nama}</h3><p class="arab">${item.arab}</p><p><i>${item.latin}</i></p><p>${item.terjemah}</p></div>`;
+                });
+            }
+
             document.getElementById('kontenSholat').innerHTML = html;
         }
         window.onload = updateKonten;
