@@ -8,9 +8,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Panduan Sholat 🤲</h1>
+        <h1>PANDUAN IBADAH 🕌</h1>
         
         <select id="waktuSholat" onchange="updateKonten()" class="card" style="width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px;">
+            <option value="wudhu">Panduan Wudhu</option>
             <option value="subuh">Sholat Subuh</option>
             <option value="zuhur">Sholat Zuhur</option>
             <option value="ashar">Sholat Ashar</option>
@@ -30,15 +31,42 @@
             const urlParams = new URLSearchParams(window.location.search);
             const menuAsal = urlParams.get('menu');
 
-            if (menuAsal === 'zikir' && !window.sudahDiubah) {
-                document.getElementById('waktuSholat').value = 'zikir';
+            if ((menuAsal === 'zikir' || menuAsal === 'wudhu') && !window.sudahDiubah) {
+                document.getElementById('waktuSholat').value = menuAsal;
                 window.sudahDiubah = true;
             }
 
             const waktu = document.getElementById('waktuSholat').value;
             let html = '';
 
-            if (waktu === 'zikir') {
+            if (waktu === 'wudhu') {
+                html += `<h2>Tata Cara Berwudhu</h2>`;
+                dataDoaDanZikir.wudhu.forEach(item => {
+                    html += `<div class="card">`;
+                    html += `<h3>${item.nama}</h3>`;
+                    
+                    let langkahWudhu = item.nama.toLowerCase();
+                    if (langkahWudhu.includes("telapak tangan")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Tangan"></div>`;
+                    } else if (langkahWudhu.includes("kumur")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Berkumur"></div>`;
+                    } else if (langkahWudhu.includes("hidung")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Hidung"></div>`;
+                    } else if (langkahWudhu.includes("wajah") || langkahWudhu.includes("muka")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Wajah"></div>`;
+                    } else if (langkahWudhu.includes("siku")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Tangan"></div>`;
+                    } else if (langkahWudhu.includes("kepala") || langkahWudhu.includes("rambut")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Kepala"></div>`;
+                    } else if (langkahWudhu.includes("telinga")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Telinga"></div>`;
+                    } else if (langkahWudhu.includes("kaki")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Kaki"></div>`;
+                    }
+
+                    html += `<p class="arab">${item.arab}</p><p><i>${item.latin}</i></p><p>${item.terjemah}</p></div>`;
+                });
+            } else if (waktu === 'zikir') {
                 html += `<h2>Zikir Setelah Shalat</h2>`;
                 dataDoaDanZikir.zikir.forEach(item => {
                     html += `<div class="card"><h3>${item.nama}</h3><p class="arab">${item.arab}</p><p><i>${item.latin}</i></p><p>${item.terjemah}</p></div>`;
@@ -51,7 +79,21 @@
                 const data = dataSholat[waktu];
                 html += `<h2>${data.judul}</h2>`;
                 data.langkah.forEach(item => {
-                    html += `<div class="card"><h3>${item.nama}</h3><p class="arab">${item.arab}</p><p><i>${item.latin}</i></p><p>${item.terjemah}</p></div>`;
+                    html += `<div class="card">`;
+                    html += `<h3>${item.nama}</h3>`;
+                    
+                    let gerakan = item.nama.toLowerCase();
+                    if (gerakan.includes("ruku")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Rukuk"></div>`;
+                    } else if (gerakan.includes("sujud")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Sujud"></div>`;
+                    } else if (gerakan.includes("tahiyat") || gerakan.includes("tasyahud")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Tahiyat"></div>`;
+                    } else if (gerakan.includes("takbir") || gerakan.includes("iftitah") || gerakan.includes("berdiri")) {
+                        html += `<div style="text-align:center; margin-bottom:15px;"><img src="https://icons8.com" alt="Berdiri"></div>`;
+                    }
+
+                    html += `<p class="arab">${item.arab}</p><p><i>${item.latin}</i></p><p>${item.terjemah}</p></div>`;
                 });
             }
 
